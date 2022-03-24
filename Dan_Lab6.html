@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Lab 6</title>
+</head>		
+	<body style="background-color: #aaffcd;">
+		<h1>Grocery Store</h1>
+		
+		<hr>
+		
+		<!-- Department Selection Area -->
+		<h3>Department</h3>
+		<div id="radioButtons" style="border: 1px solid black; padding: 5px; background-color: #ffffff;">
+			<p>
+				<input type="radio" id="rbProduce" name="department" value="Produce" onclick="displayProducts();">
+				Produce
+			</p>
+			<p>
+				<input type="radio" id="rbBakery" name="department" value="Bakery" onclick="displayProducts();">
+				Bakery
+			</p>
+			<p>
+				<input type="radio" id="rbMeat" name="department" value="Meats" onclick="displayProducts();">
+				Meats
+			</p>
+			<p>
+				<input type="radio" id="rbCheese" name="department" value="Cheese" onclick="displayProducts();">
+				Cheese
+			</p>
+		
+		</div>
+		
+		<hr>
+		
+		<!-- Product Output Area -->
+		<h3>Products Available</h3>
+		<div id="productOutput" style="border: 1px solid black; padding: 5px; background-color: #ffffff;">[Select a Department]</div>
+		
+		<!-- Add Product to Department -->
+		<p>Add Product:
+			<input type="text" id="product">
+			<input type="button" value="Add Product" onclick="addProduct();">
+		</p>
+		
+		<hr>
+		
+		<!-- Product Selection Field -->
+		<h3>Shopping Cart</h3>
+		
+		<p>Add Item #
+			<select id="itemNumDropdown"><option selected disabled value=null>00</option></select>
+			 to Cart:
+			<input type="button" value="Add to Cart" onclick="addItemToCart();">
+		</p>
+		
+		<!-- Product Output Area -->
+		<div id="cartOutput" style="border: 1px solid black; padding: 5px; background-color: #ffffff;">[Add an Item to Cart]</div>
+		
+		<!-- Javascript -->
+		<script>
+            //Declare Variables
+            var produce = ["Apples", "Bananas", "Mangos", "Grapes", "Pears", "Brocolli"];
+            var bakery = ["Baguette", "Pumpkin Pie", "Chocolate Cookies"];
+            var meat = ["Beef", "Chicken", "Ham", "Turkey"];
+            var cheese = ["Cheddar", "Swiss", "Gouda", "Havarti", "Asiago"];
+            var shoppingCart = [];
+            //Create function to display products.
+        
+            function displayProducts() {
+                var selectedDepartment = document.getElementById("radioButtons").getElementsByTagName("input");
+                //Add options to selctedDepartment
+				for (var i = 0; i < selectedDepartment.length; i++) {
+                if (selectedDepartment[i].checked) {
+                    var selectedDepartment = selectedDepartment[i].value;
+                    if (selectedDepartment == "Produce") {
+                        document.getElementById("productOutput").innerHTML = produce;
+                        changeItemDropDown(produce.length);
+                    } else if (selectedDepartment == "Bakery") {
+                        document.getElementById("productOutput").innerHTML = bakery;
+                        changeItemDropDown(bakery.length);
+                    } else if (selectedDepartment == "Meats") {
+                        document.getElementById("productOutput").innerHTML = meat;
+                        changeItemDropDown(meat.length);
+                    } else if (selectedDepartment == "Cheese") {
+                        document.getElementById("productOutput").innerHTML = cheese;
+                        changeItemDropDown(cheese.length);
+                        }
+                    }
+                } //end if
+            } //end displayProducts function
+
+            //Create function addProduct().
+            function addProduct() {
+                var newProduct = document.getElementById("product").value;
+                var selectedDepartment = document.getElementById("radioButtons").getElementsByTagName("input");
+                //Add options to selctedDepartment
+				for (var i = 0; i < selectedDepartment.length; i++) {
+                if (selectedDepartment[i].checked) {
+                    var selectedDepartment = selectedDepartment[i].value;
+                    if (selectedDepartment == "Produce") {
+                        produce.push(newProduct);
+                    } else if (selectedDepartment == "Bakery") {
+                        bakery.push(newProduct);
+                    } else if (selectedDepartment == "Meats") {
+                        meat.push(newProduct);
+                    } else if (selectedDepartment == "Cheese") {
+                        cheese.push(newProduct);
+                        }
+                    } //end if
+                }
+                displayProducts(); //Call the displayProducts() function.
+                document.getElementById("product").value = ""; //Clear the textbox value after the product is added.
+            }
+            //Create function addItemToCart()
+
+           function addItemToCart() {
+                var selectedItem = document.getElementById("itemNumDropdown").value;
+                var selectedDepartment = document.getElementById("radioButtons").getElementsByTagName("input");
+                // Add options to selctedDepartment
+				for (var i = 0; i < selectedDepartment.length; i++) {
+                if (selectedDepartment[i].checked) {
+                    var selectedDepartment = selectedDepartment[i].value;
+                    if (selectedDepartment == "Produce") {
+                        shoppingCart.push(produce[parseInt(selectedItem)-1]);
+                    } else if (selectedDepartment == "Bakery") {
+                        shoppingCart.push(bakery[parseInt(selectedItem)-1]);
+                    } else if (selectedDepartment == "Meats") {
+                        shoppingCart.push(meat[parseInt(selectedItem)-1]);
+                    } else if (selectedDepartment == "Cheese") {
+                        shoppingCart.push(cheese[parseInt(selectedItem)-1]);
+                        }
+                    } //end if
+                }
+				//Output the cart array
+                document.getElementById("cartOutput").innerHTML = shoppingCart;
+            } // end addItemToCart function
+
+            //Create function changeItemDropDown()
+			/*
+				changeItemDropdown()
+				Purpose: Populate the dropdown with numbers from 1 to maxNumber
+				Parameters: maxNumber 
+				Returns: Nothing
+			*/
+			function changeItemDropDown(maxNumber) {
+				// Validate maxNumber
+				if(maxNumber > 1)
+				{
+					// Get Dropdown Element
+					var dropDown = document.getElementById("itemNumDropdown");
+					
+					// Empty Dropdown
+					dropDown.innerHTML = "";
+					
+					// Create default option 00
+					var defaultOption = document.createElement("option"); 
+					defaultOption.innerHTML = "00";
+					defaultOption.value = null;	
+					defaultOption.disabled = true;
+					defaultOption.selected = true;
+					dropDown.appendChild(defaultOption);
+					
+					// Add options to dropDown
+					for (var x = 1; x <= maxNumber; x++)
+					{
+						var tempElement = document.createElement("option"); 					
+						tempElement.innerHTML = x;
+						tempElement.value = x;					
+						dropDown.appendChild(tempElement);		
+					}
+					
+					console.log("Dropdown updated!");
+					
+				} // end if
+				else
+				{
+					console.log("Dropdown not updated!");
+				}
+				
+			} // end changeItemDropdown function
+		
+		</script>
+	</body>
+</html>	
